@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>GreenToken Kasese| Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f7ec;
+      color: #1a3a2b;
+      line-height: 1.5;
+      overflow-x: hidden;
+      width: 100%;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 16px; width: 100%; }
+    
+    /* ===== NAVIGATION ===== */
+    .navbar {
+      background: #0a3b2c;
+      padding: 0.8rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .logo h1 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a8e063, #56ab2f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .logo p { font-size: 0.55rem; color: #c8e6c9; }
+    .nav-links {
+      display: flex;
+      gap: 0.6rem;
+      list-style: none;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #f5f8f0;
+      font-weight: 600;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 2px solid transparent;
+      font-size: 0.7rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .nav-links a:hover, .nav-links a.active { border-bottom-color: #7ed957; color: #c8ffb0; }
+    .logout-btn { background: #c0392b; padding: 0.3rem 0.7rem; border-radius: 40px; }
+    .badge-chat { background: #e74c3c; color: white; border-radius: 50%; padding: 0.1rem 0.4rem; font-size: 0.6rem; margin-left: 0.2rem; }
+    
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-block;
+      background: #7ed957;
+      color: #0a3b2c;
+      padding: 0.5rem 1rem;
+      border-radius: 60px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+      text-align: center;
+    }
+    .btn-danger { background: #c0392b; color: white; }
+    .btn-success { background: #27ae60; color: white; }
+    .btn-warning { background: #f39c12; color: white; }
+    .btn-info { background: #2980b9; color: white; }
+    .btn-gold { background: #f1c40f; color: #1a3a2b; }
+    .btn-sm { padding: 0.3rem 0.7rem; font-size: 0.7rem; }
+    .btn-block { width: 100%; margin-top: 0.5rem; }
+    .btn-danger-sm { background: #c0392b; color: white; padding: 0.2rem 0.6rem; border-radius: 40px; font-size: 0.65rem; border: none; cursor: pointer; }
+    
+    /* ===== CARDS ===== */
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 1rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+      border: 1px solid #ddf0cc;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 1.2rem 0 0.8rem;
+      color: #1b5e3f;
+      border-left: 4px solid #7ed957;
+      padding-left: 0.7rem;
+    }
+    
+    /* ===== DATE/TIME ===== */
+    .datetime-card {
+      background: linear-gradient(135deg, #1b5e3f, #0a3b2c);
+      color: white;
+      padding: 0.8rem;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
+    .datetime-card h3 { font-size: 1.4rem; font-family: monospace; letter-spacing: 2px; }
+    .datetime-card p { font-size: 0.75rem; opacity: 0.9; margin-top: 0.2rem; }
+    
+    /* ===== LOGIN ===== */
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #0f4c38, #1b6e4a);
+      width: 100%;
+    }
+    .auth-card {
+      background: white;
+      border-radius: 28px;
+      padding: 1.5rem;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .auth-card h2 { margin-bottom: 1.2rem; color: #1b5e3f; font-size: 1.4rem; }
+    .auth-card input {
+      width: 100%;
+      padding: 10px 14px;
+      margin-bottom: 0.8rem;
+      border-radius: 40px;
+      border: 1px solid #cde0bc;
+      font-size: 0.85rem;
+    }
+    
+    /* ===== DASHBOARD STATS ===== */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, #1b5e3f, #0a3b2c);
+      color: white;
+      padding: 0.8rem;
+      border-radius: 18px;
+      text-align: center;
+    }
+    .stat-card h3 { font-size: 1.3rem; color: #7ed957; }
+    .stat-card p { font-size: 0.7rem; }
+    
+    /* ===== TABLES ===== */
+    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 16px; overflow: hidden; font-size: 0.75rem; }
+    th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+    th { background: #1b5e3f; color: white; font-size: 0.7rem; }
+    
+    /* ===== STATUS ===== */
+    .status-pending { color: #f39c12; font-weight: 600; }
+    .status-approved { color: #27ae60; font-weight: 600; }
+    .status-rejected { color: #c0392b; font-weight: 600; }
+    .status-resolved { color: #27ae60; font-weight: 600; }
+    .status-in-progress { color: #2980b9; font-weight: 600; }
+    
+    /* ===== MESSAGES ===== */
+    .message { padding: 0.7rem; border-radius: 12px; margin: 0.8rem 0; font-size: 0.8rem; }
+    .message-success { background: #d5f5e3; color: #1e8449; }
+    .message-error { background: #fadbd8; color: #c0392b; }
+    .message-info { background: #d6eaf8; color: #2c3e50; }
+    .message-warning { background: #fef9e7; color: #e67e22; }
+    
+    /* ===== MODAL ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white;
+      border-radius: 24px;
+      padding: 1.2rem;
+      max-width: 500px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    .close-modal { font-size: 1.5rem; cursor: pointer; color: #999; }
+    
+    /* ===== FORMS ===== */
+    .form-group { margin-bottom: 0.8rem; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 40px;
+      border: 1px solid #cde0bc;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .form-group textarea { border-radius: 20px; min-height: 80px; resize: vertical; }
+    
+    /* ===== COMPLAINT CARD ===== */
+    .complaint-card {
+      border-left: 4px solid #7ed957;
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+      background: #f8fcf6;
+      border-radius: 12px;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      font-weight: 600;
+    }
+    
+    /* ===== CURRENCY CONVERTER ===== */
+    .converter-card {
+      background: linear-gradient(135deg, #1b5e3f, #2d8a5e);
+      border-radius: 24px;
+      padding: 1.5rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+    .converter-card .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+    }
+    .converter-card input {
+      flex: 1;
+      min-width: 150px;
+      padding: 12px 16px;
+      border-radius: 40px;
+      border: none;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      backdrop-filter: blur(4px);
+    }
+    .converter-card input::placeholder { color: rgba(255,255,255,0.6); }
+    .converter-card .result-box {
+      background: rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 1rem;
+      margin-top: 1rem;
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .converter-card .result-box .amount {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #f1c40f;
+    }
+    .converter-card .result-box .label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+    .rate-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    
+    /* ===== CHAT ===== */
+    .chat-container {
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 0.5rem;
+      background: #f9fbf8;
+      border-radius: 16px;
+      margin-bottom: 0.8rem;
+    }
+    .chat-message {
+      padding: 0.5rem 0.8rem;
+      border-radius: 16px;
+      margin-bottom: 0.5rem;
+      max-width: 85%;
+      word-wrap: break-word;
+    }
+    .chat-message.sent {
+      background: #7ed957;
+      color: #0a3b2c;
+      margin-left: auto;
+      text-align: right;
+    }
+    .chat-message.received {
+      background: #e8f0e4;
+      color: #1a3a2b;
+      margin-right: auto;
+    }
+    .chat-message .time {
+      font-size: 0.55rem;
+      opacity: 0.6;
+      margin-top: 0.2rem;
+      display: block;
+    }
+    
+    /* ===== RESPONSIVE ===== */
+    @media (min-width: 768px) {
+      .container { padding: 0 24px; }
+      .logo h1 { font-size: 1.5rem; }
+      .nav-links a { font-size: 0.85rem; }
+      .dashboard-stats { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+      .stat-card h3 { font-size: 1.6rem; }
+      .converter-card .input-group { flex-wrap: nowrap; }
+    }
+    @media (max-width: 480px) {
+      .nav-links a { font-size: 0.6rem; }
+      .stat-card h3 { font-size: 1rem; }
+      .converter-card .result-box .amount { font-size: 1.6rem; }
+      .chat-message { max-width: 95%; }
+    }
+
+    /* ===== BLACK & GRAPHITE THEME ===== */
+    body { background: #090909; color: #ededed; }
+    .navbar { background: #050505; }
+    .logo h1 { background: none; color: #fff; -webkit-text-fill-color: #fff; }
+    .logo p, .nav-links a { color: #c9c9c9; }
+    .nav-links a:hover, .nav-links a.active { border-bottom-color: #fff; color: #fff; }
+    .container, #app { color: #ededed; }
+    .card, .auth-card, .modal-content, table { background: #151515; color: #ededed; border-color: #303030; }
+    .section-title, .auth-card h2 { color: #fff; border-left-color: #aaa; }
+    .datetime-card, .stat-card, .converter-card, .auth-container {
+      background: linear-gradient(135deg, #191919, #050505);
+      color: #f5f5f5;
+    }
+    .stat-card h3, .converter-card .result-box .amount { color: #fff; }
+    .table-responsive table { background: #151515; color: #eee; }
+    th { background: #252525; color: #fff; }
+    th, td { border-bottom-color: #333; }
+    .btn, .btn-success, .btn-info, .btn-warning, .btn-gold {
+      background: #e5e5e5 !important; color: #090909 !important;
+    }
+    .btn-danger, .btn-danger-sm, .logout-btn { background: #353535 !important; color: #fff !important; }
+    .badge-chat { background: #555; color: #fff; }
+    .form-group input, .form-group select, .form-group textarea,
+    .auth-card input, #chatInput {
+      background: #202020; color: #f5f5f5; border-color: #484848 !important;
+    }
+    input::placeholder, textarea::placeholder { color: #999; }
+    .complaint-card, .chat-container { background: #191919; color: #eee; border-left-color: #888; }
+    .chat-message.sent { background: #dedede; color: #090909; }
+    .chat-message.received { background: #292929; color: #eee; }
+    .modal-header { border-bottom-color: #333; }
+    .close-modal { color: #bbb; }
+    .status-pending, .status-approved, .status-rejected, .status-resolved,
+    .status-in-progress { color: #d0d0d0; }
+    .message-success, .message-error, .message-info, .message-warning {
+      background: #242424; color: #eee; border: 1px solid #444;
+    }
+    [style*="#1b5e3f"], [style*="#cde0bc"] { color: #fff !important; border-color: #484848 !important; }
+    [style*="#e8f5e9"], [style*="#e8f5e9"] * { background-color: #222 !important; color: #eee !important; }
+    [style*="#f5f5f5"] { background-color: #222 !important; color: #eee !important; }
+    [style*="color:#666"] { color: #aaa !important; }
+    .status-badge { background: #353535 !important; color: #fff !important; }
+    .theme-toggle {
+      border: 1px solid #555; border-radius: 30px; padding: 0.35rem 0.75rem;
+      background: #222; color: #fff; font: inherit; font-size: 0.72rem;
+      font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .theme-toggle:hover { background: #444; }
+
+    /* Light (white) theme */
+    body.light-theme { background: #f4f4f4; color: #171717; }
+    .light-theme .navbar { background: #fff; box-shadow: 0 3px 12px #00000014; }
+    .light-theme .logo h1 { color: #111; -webkit-text-fill-color: #111; }
+    .light-theme .logo p, .light-theme .nav-links a { color: #333; }
+    .light-theme .nav-links a:hover, .light-theme .nav-links a.active { border-bottom-color: #111; color: #000; }
+    .light-theme .card, .light-theme .auth-card, .light-theme .modal-content,
+    .light-theme table, .light-theme .table-responsive table { background: #fff; color: #171717; border-color: #ddd; }
+    .light-theme .section-title, .light-theme .auth-card h2 { color: #111; border-left-color: #555; }
+    .light-theme .datetime-card, .light-theme .stat-card, .light-theme .converter-card,
+    .light-theme .auth-container { background: linear-gradient(135deg, #fff, #e9e9e9); color: #171717; }
+    .light-theme .stat-card h3, .light-theme .converter-card .result-box .amount { color: #111; }
+    .light-theme th { background: #e5e5e5; color: #111; }
+    .light-theme th, .light-theme td { border-bottom-color: #ddd; }
+    .light-theme .btn, .light-theme .btn-success, .light-theme .btn-info,
+    .light-theme .btn-warning, .light-theme .btn-gold { background: #171717 !important; color: #fff !important; }
+    .light-theme .btn-danger, .light-theme .btn-danger-sm, .light-theme .logout-btn { background: #555 !important; color: #fff !important; }
+    .light-theme .form-group input, .light-theme .form-group select,
+    .light-theme .form-group textarea, .light-theme .auth-card input, .light-theme #chatInput {
+      background: #fff; color: #171717; border-color: #bbb !important;
+    }
+    .light-theme input::placeholder, .light-theme textarea::placeholder { color: #777; }
+    .light-theme .complaint-card, .light-theme .chat-container { background: #f5f5f5; color: #171717; border-left-color: #777; }
+    .light-theme .chat-message.sent { background: #222; color: #fff; }
+    .light-theme .chat-message.received { background: #e5e5e5; color: #171717; }
+    .light-theme .modal-header { border-bottom-color: #ddd; }
+    .light-theme .close-modal { color: #555; }
+    .light-theme .status-pending, .light-theme .status-approved, .light-theme .status-rejected,
+    .light-theme .status-resolved, .light-theme .status-in-progress { color: #333; }
+    .light-theme .message-success, .light-theme .message-error, .light-theme .message-info,
+    .light-theme .message-warning { background: #eee; color: #171717; border-color: #ccc; }
+    .light-theme [style*="#1b5e3f"], .light-theme [style*="#cde0bc"] { color: #111 !important; border-color: #bbb !important; }
+    .light-theme [style*="#e8f5e9"], .light-theme [style*="#e8f5e9"] * { background-color: #eee !important; color: #171717 !important; }
+    .light-theme [style*="#f5f5f5"] { background-color: #eee !important; color: #171717 !important; }
+    .light-theme [style*="color:#666"] { color: #555 !important; }
+    .light-theme .status-badge { background: #555 !important; color: #fff !important; }
+    .light-theme .theme-toggle { background: #fff; color: #111; border-color: #aaa; }
+    .light-theme .theme-toggle:hover { background: #e5e5e5; }
+
+    /* ===== THREE-COLOR BRAND PALETTE =====
+       Midnight navy, soft white, and teal. Opacity variants keep the UI
+       within the same three-color palette while adding depth and contrast. */
+    :root { --brand-ink: #12232e; --brand-paper: #f4f7f8; --brand-accent: #23b6a3; }
+    body { background: #0d1921; color: var(--brand-paper); }
+    .navbar { background: #101e28; }
+    .logo h1 { background: none; color: var(--brand-accent); -webkit-text-fill-color: var(--brand-accent); }
+    .logo p, .nav-links a { color: var(--brand-paper); }
+    .nav-links a:hover, .nav-links a.active { border-bottom-color: var(--brand-accent); color: var(--brand-accent); }
+    .container, #app { color: var(--brand-paper); }
+    .card, .auth-card, .modal-content, table, .table-responsive table {
+      background: rgb(244 247 248 / 6%); color: var(--brand-paper); border-color: rgb(244 247 248 / 14%);
+    }
+    .section-title, .auth-card h2 { color: var(--brand-paper); border-left-color: var(--brand-accent); }
+    .datetime-card, .stat-card, .converter-card, .auth-container {
+      background: linear-gradient(135deg, #172b36, #0d1921); color: var(--brand-paper);
+    }
+    .stat-card h3, .converter-card .result-box .amount { color: var(--brand-accent); }
+    th { background: rgb(35 182 163 / 20%); color: var(--brand-paper); }
+    th, td { border-bottom-color: rgb(244 247 248 / 14%); }
+    .btn, .btn-success, .btn-info, .btn-warning, .btn-gold,
+    .btn-danger, .btn-danger-sm, .logout-btn {
+      background: var(--brand-accent) !important; color: var(--brand-ink) !important;
+    }
+    .btn:hover, .theme-toggle:hover { filter: brightness(1.08); }
+    .badge-chat, .status-badge { background: var(--brand-accent) !important; color: var(--brand-ink) !important; }
+    .form-group input, .form-group select, .form-group textarea, .auth-card input, #chatInput {
+      background: rgb(244 247 248 / 7%); color: var(--brand-paper); border-color: rgb(244 247 248 / 20%) !important;
+    }
+    input::placeholder, textarea::placeholder { color: rgb(244 247 248 / 65%); }
+    .complaint-card, .chat-container { background: rgb(244 247 248 / 5%); color: var(--brand-paper); border-left-color: var(--brand-accent); }
+    .chat-message.sent { background: var(--brand-accent); color: var(--brand-ink); }
+    .chat-message.received { background: rgb(244 247 248 / 10%); color: var(--brand-paper); }
+    .modal-header { border-bottom-color: rgb(244 247 248 / 15%); }
+    .close-modal, .status-pending, .status-approved, .status-rejected,
+    .status-resolved, .status-in-progress { color: var(--brand-accent); }
+    .message-success, .message-error, .message-info, .message-warning {
+      background: rgb(244 247 248 / 7%); color: var(--brand-paper); border: 1px solid rgb(244 247 248 / 16%);
+    }
+    [style*="#1b5e3f"] { color: var(--brand-paper) !important; }
+    [style*="#cde0bc"] { border-color: rgb(244 247 248 / 20%) !important; }
+    [style*="#e8f5e9"], [style*="#e8f5e9"] * { background-color: #172b36 !important; color: var(--brand-paper) !important; }
+    [style*="#f5f5f5"] { background-color: #172b36 !important; color: var(--brand-paper) !important; }
+    [style*="color:#666"] { color: rgb(244 247 248 / 72%) !important; }
+    .theme-toggle { background: rgb(244 247 248 / 8%); color: var(--brand-paper); border-color: rgb(244 247 248 / 22%); }
+    body.light-theme { background: var(--brand-paper); color: var(--brand-ink); }
+    .light-theme .navbar { background: var(--brand-paper); }
+    .light-theme .logo h1 { color: var(--brand-ink); -webkit-text-fill-color: var(--brand-ink); }
+    .light-theme .logo p, .light-theme .nav-links a { color: var(--brand-ink); }
+    .light-theme .nav-links a:hover, .light-theme .nav-links a.active { border-bottom-color: var(--brand-accent); color: var(--brand-accent); }
+    .light-theme .card, .light-theme .auth-card, .light-theme .modal-content,
+    .light-theme table, .light-theme .table-responsive table { background: #fff; color: var(--brand-ink); border-color: rgb(18 35 46 / 14%); }
+    .light-theme .section-title, .light-theme .auth-card h2 { color: var(--brand-ink); border-left-color: var(--brand-accent); }
+    .light-theme .datetime-card, .light-theme .stat-card, .light-theme .converter-card,
+    .light-theme .auth-container { background: linear-gradient(135deg, #fff, var(--brand-paper)); color: var(--brand-ink); }
+    .light-theme .stat-card h3, .light-theme .converter-card .result-box .amount { color: var(--brand-accent); }
+    .light-theme .converter-card input { background: rgb(18 35 46 / 7%); color: var(--brand-ink); }
+    .light-theme th { background: rgb(35 182 163 / 15%); color: var(--brand-ink); }
+    .light-theme th, .light-theme td { border-bottom-color: rgb(18 35 46 / 14%); }
+    .light-theme .btn, .light-theme .btn-success, .light-theme .btn-info,
+    .light-theme .btn-warning, .light-theme .btn-gold, .light-theme .btn-danger,
+    .light-theme .btn-danger-sm, .light-theme .logout-btn { background: var(--brand-accent) !important; color: var(--brand-ink) !important; }
+    .light-theme .form-group input, .light-theme .form-group select,
+    .light-theme .form-group textarea, .light-theme .auth-card input, .light-theme #chatInput {
+      background: #fff; color: var(--brand-ink); border-color: rgb(18 35 46 / 22%) !important;
+    }
+    .light-theme input::placeholder, .light-theme textarea::placeholder { color: rgb(18 35 46 / 58%); }
+    .light-theme .complaint-card, .light-theme .chat-container { background: #fff; color: var(--brand-ink); border-left-color: var(--brand-accent); }
+    .light-theme .chat-message.sent { background: var(--brand-accent); color: var(--brand-ink); }
+    .light-theme .chat-message.received { background: rgb(18 35 46 / 7%); color: var(--brand-ink); }
+    .light-theme .modal-header { border-bottom-color: rgb(18 35 46 / 14%); }
+    .light-theme .close-modal, .light-theme .status-pending, .light-theme .status-approved,
+    .light-theme .status-rejected, .light-theme .status-resolved, .light-theme .status-in-progress { color: var(--brand-accent); }
+    .light-theme .message-success, .light-theme .message-error, .light-theme .message-info,
+    .light-theme .message-warning { background: rgb(18 35 46 / 5%); color: var(--brand-ink); border-color: rgb(18 35 46 / 14%); }
+    .light-theme [style*="#1b5e3f"] { color: var(--brand-ink) !important; }
+    .light-theme [style*="#cde0bc"] { border-color: rgb(18 35 46 / 22%) !important; }
+    .light-theme [style*="#e8f5e9"], .light-theme [style*="#e8f5e9"] * { background-color: #fff !important; color: var(--brand-ink) !important; }
+    .light-theme [style*="#f5f5f5"] { background-color: #fff !important; color: var(--brand-ink) !important; }
+    .light-theme [style*="color:#666"] { color: rgb(18 35 46 / 68%) !important; }
+    .light-theme .status-badge { background: var(--brand-accent) !important; color: var(--brand-ink) !important; }
+    .light-theme .theme-toggle { background: #fff; color: var(--brand-ink); border-color: rgb(18 35 46 / 22%); }
+    select { color-scheme: dark; }
+    select option { background: #12232e; color: #f4f7f8; }
+    select option:checked { background: #23b6a3; color: #12232e; }
+    .light-theme select { color-scheme: light; }
+    .light-theme select option { background: #fff; color: #12232e; }
+    .light-theme select option:checked { background: #23b6a3; color: #12232e; }
+    .nav-toggle { display: none; }
+    .export-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+    button, select, input { touch-action: manipulation; }
+    .btn, .theme-toggle, .nav-toggle { min-height: 42px; }
+    @media (max-width: 900px) { .table-responsive table { min-width: 720px; } }
+    @media (max-width: 900px) {
+      .nav-container { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0.65rem; }
+      .nav-toggle {
+        display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+        min-height: 44px; padding: 0.5rem 0.9rem; border: 1px solid var(--brand-accent);
+        border-radius: 12px; background: var(--brand-accent); color: var(--brand-ink);
+        font: inherit; font-weight: 700; cursor: pointer;
+      }
+      .nav-links { display: none; grid-column: 1 / -1; flex-direction: column; align-items: stretch; gap: 0.2rem; width: 100%; padding: 0.35rem 0; }
+      .navbar.menu-open .nav-links { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a { display: flex; align-items: center; min-height: 44px; padding: 0.65rem 0.8rem; font-size: 0.9rem; border-bottom: 0; border-radius: 10px; }
+      .nav-links a:hover, .nav-links a.active { background: rgb(35 182 163 / 12%); }
+      .nav-links .theme-toggle { width: 100%; text-align: left; }
+      .light-theme .nav-links a:hover, .light-theme .nav-links a.active { background: rgb(35 182 163 / 12%); }
+    }
+    @media (max-width: 600px) {
+      .container { padding-left: 12px; padding-right: 12px; }
+      .card { padding: 0.9rem; border-radius: 16px; }
+      .section-title { font-size: 1.15rem; }
+      .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+      .stat-card { min-width: 0; padding: 0.75rem 0.45rem; }
+      .stat-card h3 { overflow-wrap: anywhere; }
+      .table-responsive table { min-width: 680px; }
+      .table-responsive { margin-right: -2px; padding-bottom: 0.4rem; }
+      .converter-card { padding: 1rem; }
+      .converter-card .input-group { flex-direction: column; align-items: stretch; }
+      .converter-card .input-group > span { display: none; }
+      .converter-card input { width: 100%; min-width: 0; }
+      .export-actions { flex-direction: column; align-items: stretch; }
+      .export-actions .btn { width: 100%; }
+      .modal { padding: 0.5rem; }
+      .modal-content { max-height: 92vh; padding: 1rem; }
+      .chat-message { max-width: 94%; }
+      .form-group input, .form-group select, .form-group textarea, .auth-card input { min-height: 44px; font-size: 1rem; }
+      .btn { padding: 0.7rem 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+  // ===== DATA STORAGE =====
+  let users = [];
+  let ledgers = [];
+  let complaints = [];
+  let chatMessages = [];
+  
+  let USD_TO_UGX = 3780;
+  let currentUser = null;
+  let showChangePassword = false;
+  let activeTheme = 'dark';
+  try { activeTheme = localStorage.getItem('greenToken_theme') === 'light' ? 'light' : 'dark'; } catch {}
+  document.body.classList.toggle('light-theme', activeTheme === 'light');
+
+  function renderThemeToggle() {
+    return `<button type="button" class="theme-toggle" onclick="toggleTheme()">${activeTheme === 'dark' ? '☀ White mode' : '◐ Dark mode'}</button>`;
+  }
+
+  function toggleTheme() {
+    activeTheme = activeTheme === 'dark' ? 'light' : 'dark';
+    document.body.classList.toggle('light-theme', activeTheme === 'light');
+    try { localStorage.setItem('greenToken_theme', activeTheme); } catch {}
+    document.querySelectorAll('.theme-toggle').forEach(button => {
+      button.textContent = activeTheme === 'dark' ? '☀ White mode' : '◐ Dark mode';
+    });
+  }
+  window.toggleTheme = toggleTheme;
+
+  function toggleNav(button) {
+    const navbar = button.closest('.navbar');
+    const isOpen = navbar.classList.toggle('menu-open');
+    button.setAttribute('aria-expanded', String(isOpen));
+    button.textContent = isOpen ? '× Close menu' : '☰ Menu';
+  }
+  function closeMobileNav() {
+    document.querySelectorAll('.navbar.menu-open').forEach(navbar => {
+      navbar.classList.remove('menu-open');
+      const button = navbar.querySelector('.nav-toggle');
+      if (button) { button.setAttribute('aria-expanded', 'false'); button.textContent = '☰ Menu'; }
+    });
+  }
+  window.toggleNav = toggleNav;
+  
+  async function api(path, options = {}) {
+    const response = await fetch('/api' + path, {
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+      ...options
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Request failed');
+    return data;
+  }
+
+  async function loadServerData() {
+    const data = await api('/bootstrap');
+    currentUser = data.user;
+    users = data.users;
+    ledgers = data.ledgers;
+    complaints = data.complaints;
+    chatMessages = data.chatMessages;
+    USD_TO_UGX = Number(data.settings?.usdToUgx) || 3780;
+    showChangePassword = currentUser.mustChangePassword;
+  }
+
+  async function saveData() {
+    try {
+      await api('/sync', { method: 'POST', body: JSON.stringify({ users, ledgers, complaints, chatMessages, settings: { usdToUgx: USD_TO_UGX } }) });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+  
+  function formatDate(dateStr) { return new Date(dateStr).toLocaleDateString(); }
+  function formatDateTimeFull(dateStr) { return new Date(dateStr).toLocaleString(); }
+  function formatTime(dateStr) { return new Date(dateStr).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+  function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
+  
+  function getCurrentDateTime() {
+    const now = new Date();
+    return {
+      date: now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+      time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    };
+  }
+  
+  let dateTimeInterval = null;
+  function startDateTimeUpdater(elementId) {
+    if (dateTimeInterval) clearInterval(dateTimeInterval);
+    const update = () => {
+      const { date, time } = getCurrentDateTime();
+      const container = document.getElementById(elementId);
+      if (container) container.innerHTML = `<h3>${time}</h3><p>${date}</p>`;
+    };
+    update();
+    dateTimeInterval = setInterval(update, 1000);
+  }
+  
+  // ===== RENDER APP =====
+  function renderApp() {
+    const app = document.getElementById('app');
+    if (!currentUser) {
+      app.innerHTML = renderLoginPage();
+      attachLoginEvents();
+    } else if (showChangePassword) {
+      app.innerHTML = renderChangePasswordPage();
+      attachChangePasswordEvents();
+    } else if (currentUser.role === 'admin') {
+      app.innerHTML = renderAdminDashboard();
+      attachAdminEvents();
+      startDateTimeUpdater('adminDateTime');
+    } else if (currentUser.role === 'finance') {
+      app.innerHTML = renderFinanceDashboard();
+      attachFinanceEvents();
+      startDateTimeUpdater('financeDateTime');
+    } else if (currentUser.role === 'farmer') {
+      app.innerHTML = renderFarmerDashboard();
+      attachFarmerEvents();
+      startDateTimeUpdater('farmerDateTime');
+    }
+  }
+  
+  // ===== LOGIN =====
+  function renderLoginPage() {
+    return `
+      <div class="auth-container">
+        <div class="auth-card">
+          <div style="text-align:right; margin-bottom:0.5rem;">${renderThemeToggle()}</div>
+          <div style="text-align:center; margin-bottom:1rem;">
+            <h1 style="color:#1b5e3f; font-size:1.6rem;"><strong>GreenToken Kasese</strong></h1>
+            <p style="font-size:0.8rem;">Farmer Management System</p>
+          </div>
+          <h2 style="font-size:1.3rem;">Login</h2>
+          <div id="loginMessage"></div>
+          <input type="text" id="loginUsername" placeholder="Username">
+          <input type="password" id="loginPassword" placeholder="Password">
+          <button class="btn" style="width:100%;" onclick="handleLogin()">Login →</button>
+          <p style="text-align:center; margin-top:1rem; font-size:0.7rem;">
+            <a href="#" onclick="showSelfRegister()">New Farmer? Register Here</a>
+          </p>
+          <hr style="margin:1rem 0;">
+          <p style="font-size:0.65rem; text-align:center; color:#666;">
+           
+          </p>
+        </div>
+      </div>
+    `;
+  }
+  
+  async function handleLogin() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const messageDiv = document.getElementById('loginMessage');
+    try {
+      await api('/login', { method: 'POST', body: JSON.stringify({ username, password }) });
+      await loadServerData();
+      renderApp();
+    } catch (error) {
+      messageDiv.innerHTML = `<div class="message message-error">❌ ${error.message}</div>`;
+    }
+  }
+  
+  function renderChangePasswordPage() {
+    return `
+      <div class="auth-container">
+        <div class="auth-card">
+          <div style="text-align:right; margin-bottom:0.5rem;">${renderThemeToggle()}</div>
+          <h2 style="font-size:1.3rem;">🔐 Change Default Password</h2>
+          <div class="message message-warning">Welcome ${escapeHtml(currentUser.fullname)}! Please change your default password.</div>
+          <div id="changePwMessage"></div>
+          <input type="password" id="newPassword" placeholder="New Password">
+          <input type="password" id="confirmPassword" placeholder="Confirm Password">
+          <button class="btn btn-success" style="width:100%;" onclick="handleChangePassword()">Update Password →</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  function handleChangePassword() {
+    const newPw = document.getElementById('newPassword').value.trim();
+    const confirmPw = document.getElementById('confirmPassword').value.trim();
+    const messageDiv = document.getElementById('changePwMessage');
+    if (!newPw || newPw.length < 8) {
+      messageDiv.innerHTML = '<div class="message message-error">❌ Password must be at least 8 characters</div>';
+      return;
+    }
+    if (newPw !== confirmPw) {
+      messageDiv.innerHTML = '<div class="message message-error">❌ Passwords do not match</div>';
+      return;
+    }
+    api('/password', { method: 'POST', body: JSON.stringify({ password: newPw }) }).then(() => {
+      currentUser.mustChangePassword = false;
+      showChangePassword = false;
+      renderApp();
+    }).catch(error => { messageDiv.innerHTML = `<div class="message message-error">❌ ${error.message}</div>`; });
+  }
+  
+  function showSelfRegister() {
+    document.getElementById('app').innerHTML = renderSelfRegisterPage();
+    attachSelfRegisterEvents();
+  }
+  
+  function renderSelfRegisterPage() {
+    return `
+      <div class="auth-container">
+        <div class="auth-card">
+          <div style="text-align:right; margin-bottom:0.5rem;">${renderThemeToggle()}</div>
+          <h2 style="font-size:1.3rem;"> Farmer Registration</h2>
+          <div id="selfRegMessage"></div>
+          <input type="text" id="regFullname" placeholder="Full Name">
+          <input type="text" id="regPhone" placeholder="Phone Number">
+          <input type="text" id="regDistrict" placeholder="District">
+          <input type="number" id="regTrees" placeholder="Number of Trees">
+          <input type="text" id="regUsername" placeholder="Choose Username">
+          <input type="password" id="regPassword" placeholder="Create Password">
+          <button class="btn btn-success" style="width:100%;" onclick="handleSelfRegister()">Register →</button>
+          <p style="text-align:center; margin-top:1rem;"><a href="#" onclick="renderApp()">← Back to Login</a></p>
+        </div>
+      </div>
+    `;
+  }
+  
+  async function handleSelfRegister() {
+    const fullname = document.getElementById('regFullname').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const district = document.getElementById('regDistrict').value.trim();
+    const trees = parseInt(document.getElementById('regTrees').value);
+    const username = document.getElementById('regUsername').value.trim();
+    const password = document.getElementById('regPassword').value.trim();
+    const messageDiv = document.getElementById('selfRegMessage');
+    if (!fullname || !phone || !district || !trees || !username || !password) {
+      messageDiv.innerHTML = '<div class="message message-error">❌ Fill all fields</div>';
+      return;
+    }
+    try {
+      await api('/register', { method: 'POST', body: JSON.stringify({ fullname, phone, district, trees, username, password }) });
+      messageDiv.innerHTML = '<div class="message message-success">✅ Registered! Awaiting admin approval.</div>';
+      setTimeout(() => renderApp(), 3000);
+    } catch (error) {
+      messageDiv.innerHTML = `<div class="message message-error">❌ ${error.message}</div>`;
+    }
+  }
+  
+  // ===== CURRENCY CONVERTER =====
+  function renderCurrencyConverter() {
+    return `
+      <div class="converter-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <h3 style="font-size:1.1rem;">💱 Currency Converter</h3>
+          <span class="rate-badge">1 USD = ${USD_TO_UGX} UGX</span>
+        </div>
+        <div class="input-group">
+          <input type="number" id="usdAmount" placeholder="Enter USD amount" min="0" step="0.01" oninput="convertCurrency()">
+          <span style="font-weight:700; font-size:0.9rem;">→</span>
+          <input type="text" id="ugxAmount" placeholder="UGX amount" readonly style="background:rgba(255,255,255,0.08);">
+        </div>
+        <div class="result-box">
+          <div class="label">UGX Amount</div>
+          <div class="amount" id="convertedResult">0 UGX</div>
+          <div style="font-size:0.7rem; opacity:0.7; margin-top:0.3rem;">
+            Live rate: 1 USD = ${USD_TO_UGX} UGX
+          </div>
+        </div>
+        <div style="display:flex; gap:0.5rem; margin-top:0.8rem; flex-wrap:wrap;">
+          <button class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:white;" onclick="setQuickAmount(10)">$10</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:white;" onclick="setQuickAmount(25)">$25</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:white;" onclick="setQuickAmount(50)">$50</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:white;" onclick="setQuickAmount(100)">$100</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,0.15); color:white;" onclick="setQuickAmount(500)">$500</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  function convertCurrency() {
+    const usdInput = document.getElementById('usdAmount');
+    const ugxInput = document.getElementById('ugxAmount');
+    const resultDisplay = document.getElementById('convertedResult');
+    const usd = parseFloat(usdInput.value);
+    if (!isNaN(usd) && usd >= 0) {
+      const ugx = usd * USD_TO_UGX;
+      ugxInput.value = ugx.toLocaleString() + ' UGX';
+      resultDisplay.textContent = ugx.toLocaleString() + ' UGX';
+    } else {
+      ugxInput.value = '';
+      resultDisplay.textContent = '0 UGX';
+    }
+  }
+  
+  function setQuickAmount(amount) {
+    document.getElementById('usdAmount').value = amount;
+    convertCurrency();
+  }
+  
+  // ===== CHAT SYSTEM =====
+  function renderChatInterface() {
+    const chatWith = currentUser.role === 'admin' ? 'finance' : 'admin';
+    const chatPartner = users.find(u => u.role === chatWith);
+    const messages = chatMessages.filter(m => 
+      (m.sender === currentUser.username && m.receiver === chatWith) ||
+      (m.sender === chatWith && m.receiver === currentUser.username)
+    );
+    const unreadCount = chatMessages.filter(m => m.receiver === currentUser.username && !m.read).length;
+    
+    return `
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem;">
+          <h3>💬 Chat with ${chatPartner ? chatPartner.fullname : chatWith}</h3>
+          ${unreadCount > 0 ? `<span class="badge-chat">${unreadCount} new</span>` : ''}
+        </div>
+        <div class="chat-container" id="chatContainer">
+          ${messages.length === 0 ? '<p style="text-align:center; color:#999; font-size:0.8rem;">No messages yet. Start a conversation!</p>' : 
+            messages.map(m => `
+              <div class="chat-message ${m.sender === currentUser.username ? 'sent' : 'received'}">
+                <strong>${escapeHtml(m.senderName || m.sender)}</strong>
+                <p style="margin:0.2rem 0;">${escapeHtml(m.message)}</p>
+                <span class="time">${formatTime(m.timestamp)}</span>
+              </div>
+            `).join('')}
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1; padding:10px 14px; border-radius:40px; border:1px solid #cde0bc; font-size:0.85rem;">
+          <button class="btn btn-info btn-sm" onclick="sendChatMessage()">Send</button>
+        </div>
+      </div>
+    `;
+  }
+  
+  function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+    const receiver = currentUser.role === 'admin' ? 'finance' : 'admin';
+    chatMessages.push({
+      id: Date.now(),
+      sender: currentUser.username,
+      senderName: currentUser.fullname,
+      receiver: receiver,
+      message: message,
+      timestamp: new Date().toISOString(),
+      read: false
+    });
+    input.value = '';
+    saveData();
+    // Re-render just the chat section
+    const chatSection = document.getElementById('chatSection');
+    if (chatSection) chatSection.innerHTML = renderChatInterface();
+    // Auto scroll to bottom
+    const container = document.getElementById('chatContainer');
+    if (container) container.scrollTop = container.scrollHeight;
+  }
+  
+  // ===== ADMIN DASHBOARD =====
+  function renderAdminDashboard() {
+    const farmers = users.filter(u => u.role === 'farmer');
+    const pending = farmers.filter(f => f.status === 'pending');
+    const totalTrees = farmers.reduce((s, f) => s + (f.trees || 0), 0);
+    const totalCredits = farmers.reduce((s, f) => s + (f.estimatedCredits || 0), 0);
+    const totalPaid = ledgers.reduce((s, l) => s + l.farmerPayout, 0);
+    const pendingComplaints = complaints.filter(c => c.status === 'pending' || c.status === 'in-progress');
+    const unreadChat = chatMessages.filter(m => m.receiver === 'admin' && !m.read).length;
+    
+    return `
+      <nav class="navbar"><div class="container nav-container">
+        <div class="logo"><h1>◆ GreenToken</h1><p>Admin Portal</p></div>
+        <button type="button" class="nav-toggle" onclick="toggleNav(this)" aria-expanded="false" aria-controls="adminNavLinks">☰ Menu</button>
+        <ul class="nav-links" id="adminNavLinks">
+          <li><a onclick="showAdminSection('dashboard')" class="active">Dashboard</a></li>
+          <li><a onclick="showAdminSection('farmers')">Farmers</a></li>
+          <li><a onclick="showAdminSection('pending')">Pending (${pending.length})</a></li>
+          <li><a onclick="showAdminSection('registerFarmer')">+ Register</a></li>
+          <li><a onclick="showAdminSection('complaints')">Complaints (${pendingComplaints.length})</a></li>
+          <li><a onclick="showAdminSection('exchangeRate')">Exchange Rate</a></li>
+          <li><a onclick="showAdminSection('chat')">Chat ${unreadChat > 0 ? `<span class="badge-chat">${unreadChat}</span>` : ''}</a></li>
+          <li>${renderThemeToggle()}</li>
+          <li><a onclick="handleLogout()" class="logout-btn">Logout</a></li>
+        </ul>
+      </div></nav>
+      <div class="container">
+        <div class="datetime-card" id="adminDateTime"><h3>--:--:--</h3><p>Loading...</p></div>
+        ${renderCurrencyConverter()}
+        <div id="adminContent">
+          <div class="dashboard-stats">
+            <div class="stat-card"><h3>${farmers.length}</h3><p>Total Farmers</p></div>
+            <div class="stat-card"><h3>${pending.length}</h3><p>Pending Approval</p></div>
+            <div class="stat-card"><h3>${totalTrees}</h3><p>Trees Planted</p></div>
+            <div class="stat-card"><h3>${totalCredits}</h3><p>Total Credits</p></div>
+            <div class="stat-card"><h3>$${totalPaid.toLocaleString()}</h3><p>Total Payouts</p></div>
+            <div class="stat-card"><h3>${pendingComplaints.length}</h3><p>Pending Complaints</p></div>
+          </div>
+          <div class="card"><h3> System Overview</h3><p>Commission: 20% | Credit Price: $8-10 | Rate: 1 USD = ${USD_TO_UGX} UGX</p>
+            <button class="btn btn-info btn-sm" onclick="exportAllData()"> Export Report</button>
+          </div>
+          <div id="chatSection">${renderChatInterface()}</div>
+        </div>
+      </div>
+      ${renderComplaintResponseModal()}
+      ${renderRegisterFarmerModal()}
+    `;
+  }
+  
+  function renderRegisterFarmerModal() {
+    return `<div id="registerFarmerModal" class="modal"><div class="modal-content"><div class="modal-header"><h3> Register Farmer (In-Person)</h3><span class="close-modal" onclick="closeRegisterFarmerModal()">&times;</span></div>
+      <div id="adminRegMessage"></div>
+      <div class="form-group"><label>Full Name</label><input type="text" id="adminRegFullname" placeholder="Full Name"></div>
+      <div class="form-group"><label>Phone Number</label><input type="text" id="adminRegPhone" placeholder="Phone"></div>
+      <div class="form-group"><label>District</label><input type="text" id="adminRegDistrict" placeholder="District"></div>
+      <div class="form-group"><label>Number of Trees</label><input type="number" id="adminRegTrees" placeholder="Trees"></div>
+      <div class="form-group"><label>Username</label><input type="text" id="adminRegUsername" placeholder="Username"></div>
+      <div class="form-group"><label>Temporary Password</label><input type="text" id="adminRegPassword" placeholder="Password" value="default123"></div>
+      <button class="btn btn-success btn-block" onclick="adminRegisterFarmer()">Register Farmer</button>
+    </div></div>`;
+  }
+  
+  function showRegisterFarmerModal() { document.getElementById('registerFarmerModal').classList.add('active'); }
+  function closeRegisterFarmerModal() { document.getElementById('registerFarmerModal').classList.remove('active'); }
+  
+  function adminRegisterFarmer() {
+    const fullname = document.getElementById('adminRegFullname').value.trim();
+    const phone = document.getElementById('adminRegPhone').value.trim();
+    const district = document.getElementById('adminRegDistrict').value.trim();
+    const trees = parseInt(document.getElementById('adminRegTrees').value);
+    const username = document.getElementById('adminRegUsername').value.trim();
+    const password = document.getElementById('adminRegPassword').value.trim();
+    const messageDiv = document.getElementById('adminRegMessage');
+    if (!fullname || !phone || !district || !trees || !username) {
+      messageDiv.innerHTML = '<div class="message message-error">❌ Fill all fields</div>';
+      return;
+    }
+    if (users.find(u => u.username === username)) {
+      messageDiv.innerHTML = '<div class="message message-error">❌ Username exists</div>';
+      return;
+    }
+    users.push({
+      id: Date.now(), username, password: password || 'default123', role: 'farmer',
+      fullname, phone, district, trees,
+      estimatedCredits: Math.floor(trees * 0.18),
+      status: 'approved', mustChangePassword: true,
+      registeredDate: new Date().toISOString(),
+      lastPayout: null, totalEarned: 0
+    });
+    saveData();
+    messageDiv.innerHTML = `<div class="message message-success">✅ Farmer ${fullname} registered! Default password: ${password || 'default123'}</div>`;
+    setTimeout(() => { closeRegisterFarmerModal(); showAdminSection('farmers'); }, 2000);
+  }
+  
+  function renderComplaintResponseModal() {
+    return `<div id="complaintResponseModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>📩 Respond to Complaint</h3><span class="close-modal" onclick="closeComplaintResponse()">&times;</span></div>
+      <div id="complaintResponseMessage"></div>
+      <div id="complaintDetails" style="background:#f5f5f5; padding:0.8rem; border-radius:12px; margin-bottom:0.8rem;"></div>
+      <div class="form-group"><label>Response</label><textarea id="complaintResponseText" rows="3" placeholder="Write your response..."></textarea></div>
+      <div class="form-group"><label>Update Status</label><select id="complaintStatusUpdate"><option value="in-progress">In Progress</option><option value="resolved">Resolved</option></select></div>
+      <button class="btn btn-success btn-block" onclick="submitComplaintResponse()">Submit Response</button>
+    </div></div>`;
+  }
+  
+  let currentComplaintId = null;
+  
+  function openComplaintResponse(id) {
+    currentComplaintId = id;
+    const c = complaints.find(c => c.id === id);
+    if (!c) return;
+    document.getElementById('complaintDetails').innerHTML = `
+      <p><strong>From:</strong> ${escapeHtml(c.userName)} (${escapeHtml(c.userRole)})</p>
+      <p><strong>Subject:</strong> ${escapeHtml(c.subject)}</p>
+      <p><strong>Message:</strong> ${escapeHtml(c.message)}</p>
+      <p><strong>Date:</strong> ${formatDateTimeFull(c.date)}</p>
+      <p><strong>Priority:</strong> ${c.priority}</p>
+      ${c.response ? `<p><strong>Previous Response:</strong> ${escapeHtml(c.response)}</p>` : ''}
+    `;
+    document.getElementById('complaintResponseText').value = '';
+    document.getElementById('complaintStatusUpdate').value = c.status;
+    document.getElementById('complaintResponseModal').classList.add('active');
+  }
+  
+  function closeComplaintResponse() {
+    document.getElementById('complaintResponseModal').classList.remove('active');
+    currentComplaintId = null;
+  }
+  
+  function submitComplaintResponse() {
+    const response = document.getElementById('complaintResponseText').value.trim();
+    const status = document.getElementById('complaintStatusUpdate').value;
+    const msgDiv = document.getElementById('complaintResponseMessage');
+    if (!response) { msgDiv.innerHTML = '<div class="message message-error">❌ Write a response</div>'; return; }
+    const c = complaints.find(c => c.id === currentComplaintId);
+    if (c) {
+      c.response = response; c.status = status; c.respondedBy = currentUser.fullname; c.respondedDate = new Date().toISOString();
+      saveData();
+      msgDiv.innerHTML = '<div class="message message-success">✅ Response submitted!</div>';
+      setTimeout(() => { closeComplaintResponse(); if (currentUser?.role === 'admin') renderApp(); }, 1500);
+    }
+  }
+  
+  function renderAdminComplaintsList() {
+    if (complaints.length === 0) return `<div class="card"><p>No complaints yet.</p></div>`;
+    return `<div class="table-responsive"><table><thead><tr><th>User</th><th>Subject</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>${complaints.map(c => `<tr><td>${escapeHtml(c.userName)}</td><td>${escapeHtml(c.subject)}</td><td>${escapeHtml(c.date)}</td><td><span class="status-${escapeHtml(c.status)}">${escapeHtml(c.status)}</span></td><td><button class="btn btn-info btn-sm" onclick="openComplaintResponse(${Number(c.id)})">Respond</button></td>`).join('')}</tbody></table></div>`;
+  }
+  
+  // ===== FARMER LIST WITH DELETE =====
+  function renderFarmersList() {
+    const farmers = users.filter(u => u.role === 'farmer');
+    return `<h3 class="section-title">👨🏿‍🌾 All Farmers</h3>
+      <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1rem;">
+        <button class="btn btn-info btn-sm" onclick="downloadFarmersCsv()">⬇ Download Farmer Details (CSV)</button>
+        <button class="btn btn-sm" onclick="printFarmersList()">🖨 Print / Save as PDF</button>
+      </div>
+      <div class="table-responsive"><table><thead><tr><th>Name</th><th>Phone</th><th>Trees</th><th>Credits</th><th>Earned</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>${farmers.map(f => `<tr>
+        <td>${escapeHtml(f.fullname)}</td><td>${escapeHtml(f.phone || '-')}</td>
+        <td>${f.trees || 0}</td><td>${f.estimatedCredits || 0}</td>
+        <td>$${(f.totalEarned || 0)}</td>
+        <td class="status-${escapeHtml(f.status)}">${escapeHtml(f.status)}</td>
+        <td>
+          <button class="btn btn-info btn-sm" onclick="viewFarmer(${f.id})">View</button>
+          <button class="btn btn-danger-sm" onclick="deleteFarmer(${f.id})">Delete</button>
+        </td>
+      `).join('')}</tbody></table></div>`;
+  }
+
+  function farmersExportRows() {
+    return users.filter(user => user.role === 'farmer').map(farmer => [
+      farmer.id, farmer.fullname || '', farmer.username || '', farmer.phone || '', farmer.district || '',
+      Number(farmer.trees) || 0, Number(farmer.estimatedCredits) || 0, farmer.status || '',
+      farmer.registeredDate ? new Date(farmer.registeredDate).toLocaleDateString() : '',
+      (Number(farmer.totalEarned) || 0).toFixed(2), farmer.lastPayout || ''
+    ]);
+  }
+
+  function downloadFarmersCsv() {
+    const headers = ['Farmer ID','Full Name','Username','Phone','District','Trees','Estimated Credits','Account Status','Registered Date','Total Earned (USD)','Last Payout'];
+    downloadCsv(`greentoken-farmers-${new Date().toISOString().slice(0,10)}.csv`, headers, farmersExportRows());
+  }
+
+  function downloadCsv(filename, headers, rows) {
+    const escapeCell = value => {
+      let text = String(value ?? '');
+      if (/^[\s]*[=+@\-\t\r]/.test(text)) text = "'" + text;
+      return `"${text.replace(/"/g, '""')}"`;
+    };
+    const csv = '\uFEFF' + [headers, ...rows].map(row => row.map(escapeCell).join(',')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function downloadLedgersCsv() {
+    const headers = ['Transaction Ref','Farmer ID','Farmer Name','Date','Credits Sold','Price Per Credit (USD)','Total Sale (USD)','Commission (USD)','Farmer Payout (USD)','Status'];
+    const rows = ledgers.map(ledger => {
+      const farmer = users.find(user => user.id === ledger.farmerId);
+      return [ledger.transactionRef, ledger.farmerId, farmer?.fullname || 'Unknown', ledger.date,
+        ledger.creditAmount, Number(ledger.pricePerCredit).toFixed(2), Number(ledger.totalAmount).toFixed(2),
+        Number(ledger.commission).toFixed(2), Number(ledger.farmerPayout).toFixed(2), ledger.status];
+    });
+    downloadCsv(`greentoken-payout-ledger-${new Date().toISOString().slice(0,10)}.csv`, headers, rows);
+  }
+
+  function printFarmersList() {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) { alert('Allow pop-ups to open the print view.'); return; }
+    const headers = ['Farmer ID','Full Name','Username','Phone','District','Trees','Estimated Credits','Account Status','Registered Date','Total Earned (USD)','Last Payout'];
+    const rows = farmersExportRows().map(row => `<tr>${row.map(value => `<td>${escapeHtml(value)}</td>`).join('')}</tr>`).join('');
+    printWindow.document.open();
+    printWindow.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>GreenToken Farmer Register</title>
+      <style>@page{size:landscape;margin:12mm}body{font:12px Arial,sans-serif;color:#111;padding:24px}h1{font-size:20px}p{color:#444}table{width:100%;border-collapse:collapse}th,td{border:1px solid #777;padding:7px;text-align:left}th{background:#eee}@media print{body{padding:0}tr{break-inside:avoid}}</style>
+      </head><body><h1>GreenToken Kasese — Farmer Register</h1><p>Generated ${escapeHtml(new Date().toLocaleString())} · ${rows ? farmersExportRows().length : 0} farmers</p>
+      <table><thead><tr>${headers.map(header => `<th>${escapeHtml(header)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
+      <script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`);
+    printWindow.document.close();
+  }
+  
+  function deleteFarmer(id) {
+    const farmer = users.find(u => u.id === id);
+    if (!farmer) return;
+    if (confirm(`⚠️ Are you sure you want to delete farmer "${farmer.fullname}"? This action cannot be undone.`)) {
+      users = users.filter(u => u.id !== id);
+      // Also remove their ledgers and complaints
+      ledgers = ledgers.filter(l => l.farmerId !== id);
+      complaints = complaints.filter(c => c.userId !== id);
+      saveData();
+      alert(`✅ Farmer "${farmer.fullname}" has been deleted.`);
+      if (currentUser?.role === 'admin') renderApp();
+    }
+  }
+  
+  function renderPendingApproval() {
+    const pending = users.filter(u => u.role === 'farmer' && u.status === 'pending');
+    if (pending.length === 0) return `<div class="card"><p>✅ No pending approvals.</p></div>`;
+    return `<h3 class="section-title">⏳ Pending Approvals</h3>
+      <div class="table-responsive"><table><thead><tr><th>Name</th><th>Phone</th><th>Trees</th><th>Registered</th><th>Action</th></tr></thead>
+      <tbody>${pending.map(f => `<tr><td>${escapeHtml(f.fullname)}</td><td>${escapeHtml(f.phone)}</td><td>${f.trees}</td><td>${formatDate(f.registeredDate)}</td><td><button class="btn btn-success btn-sm" onclick="approveFarmer(${Number(f.id)})">Approve</button> <button class="btn btn-danger btn-sm" onclick="rejectFarmer(${Number(f.id)})">Reject</button></td>`).join('')}</tbody></table></div>`;
+  }
+  
+  // ===== FINANCE DASHBOARD =====
+  function renderFinanceDashboard() {
+    const farmers = users.filter(u => u.role === 'farmer' && u.status === 'approved');
+    const totalPaid = ledgers.reduce((s, l) => s + l.farmerPayout, 0);
+    const unreadChat = chatMessages.filter(m => m.receiver === 'finance' && !m.read).length;
+    
+    return `
+      <nav class="navbar"><div class="container nav-container">
+        <div class="logo"><h1>◆ GreenToken</h1><p>Finance Portal</p></div>
+        <button type="button" class="nav-toggle" onclick="toggleNav(this)" aria-expanded="false" aria-controls="financeNavLinks">☰ Menu</button>
+        <ul class="nav-links" id="financeNavLinks">
+          <li><a onclick="showFinanceSection('dashboard')" class="active">Dashboard</a></li>
+          <li><a onclick="showFinanceSection('ledgers')">Ledgers</a></li>
+          <li><a onclick="showFinanceSection('updateLedger')">Update Ledger</a></li>
+          <li><a onclick="showFinanceSection('chat')">Chat ${unreadChat > 0 ? `<span class="badge-chat">${unreadChat}</span>` : ''}</a></li>
+          <li>${renderThemeToggle()}</li>
+          <li><a onclick="handleLogout()" class="logout-btn">Logout</a></li>
+        </ul>
+      </div></nav>
+      <div class="container">
+        <div class="datetime-card" id="financeDateTime"><h3>--:--:--</h3><p>Loading...</p></div>
+        ${renderCurrencyConverter()}
+        <div id="financeContent">
+          <div class="dashboard-stats">
+            <div class="stat-card"><h3>${farmers.length}</h3><p>Active Farmers</p></div>
+            <div class="stat-card"><h3>$${totalPaid.toLocaleString()}</h3><p>Total Payouts</p></div>
+            <div class="stat-card"><h3>${ledgers.length}</h3><p>Transactions</p></div>
+          </div>
+          <div class="card"><h3>💰 Finance Management</h3>
+            <button class="btn btn-success btn-sm" onclick="showFinanceSection('updateLedger')">Update Farmer Ledger</button>
+            <div class="export-actions">
+              <button class="btn btn-info btn-sm" onclick="downloadFarmersCsv()">Download Farmer Details (CSV)</button>
+              <button class="btn btn-info btn-sm" onclick="downloadLedgersCsv()">Download Payout Ledger (CSV)</button>
+              <button class="btn btn-sm" onclick="printFarmersList()">Print Farmer Register</button>
+            </div>
+          </div>
+          <div id="chatSection">${renderChatInterface()}</div>
+        </div>
+      </div>
+      ${renderUpdateLedgerModal()}
+    `;
+  }
+  
+  function renderUpdateLedgerModal() {
+    const farmers = users.filter(u => u.role === 'farmer' && u.status === 'approved');
+    return `<div id="updateLedgerModal" class="modal"><div class="modal-content"><div class="modal-header"><h3> Update Farmer Ledger</h3><span class="close-modal" onclick="closeLedgerModal()">&times;</span></div>
+      <div id="ledgerMessage"></div>
+      <div class="form-group"><label>Select Farmer</label><select id="ledgerFarmer">${farmers.map(f => `<option value="${Number(f.id)}">${escapeHtml(f.fullname)} - ${Number(f.trees) || 0} trees</option>`).join('')}</select></div>
+      <div class="form-group"><label>Credits Sold</label><input type="number" id="ledgerCredits" placeholder="Credits" step="0.5"></div>
+      <div class="form-group"><label>Price per Credit ($)</label><input type="number" id="ledgerPrice" placeholder="Price" step="0.25" value="9.50"></div>
+      <div class="form-group"><label>Transaction Ref</label><input type="text" id="ledgerRef" placeholder="GT-001"></div>
+      <div class="form-group" style="background:#e8f5e9; padding:0.5rem; border-radius:12px;">
+        <label style="color:#1b5e3f;"> Auto-Calculated:</label>
+        <div id="ledgerPreview" style="font-size:0.75rem;">Total: $0.00 | Commission (20%): $0.00 | Farmer Payout (80%): $0.00</div>
+      </div>
+      <button class="btn btn-success btn-block" onclick="addLedgerEntry()">Process Payout</button>
+    </div></div>`;
+  }
+  
+  function previewLedgerCalculation() {
+    const credits = parseFloat(document.getElementById('ledgerCredits').value) || 0;
+    const price = parseFloat(document.getElementById('ledgerPrice').value) || 0;
+    const total = credits * price;
+    const commission = total * 0.2;
+    const payout = total - commission;
+    document.getElementById('ledgerPreview').innerHTML = 
+      `Total: $${total.toFixed(2)} | Commission (20%): $${commission.toFixed(2)} | Farmer Payout (80%): $${payout.toFixed(2)}`;
+  }
+  
+  function addLedgerEntry() {
+    const farmerId = parseInt(document.getElementById('ledgerFarmer').value);
+    const credits = parseFloat(document.getElementById('ledgerCredits').value);
+    const price = parseFloat(document.getElementById('ledgerPrice').value);
+    const ref = document.getElementById('ledgerRef').value.trim();
+    const msgDiv = document.getElementById('ledgerMessage');
+    if (!credits || credits <= 0 || !price || price <= 0) {
+      msgDiv.innerHTML = '<div class="message message-error">❌ Enter valid credits and price</div>';
+      return;
+    }
+    const total = credits * price;
+    const commission = total * 0.2;
+    const payout = total - commission;
+    const farmer = users.find(u => u.id === farmerId);
+    if (farmer) {
+      farmer.totalEarned = (farmer.totalEarned || 0) + payout;
+      farmer.lastPayout = new Date().toISOString().split('T')[0];
+      // Auto-update estimated credits based on trees
+      farmer.estimatedCredits = Math.floor(farmer.trees * 0.18);
+    }
+    ledgers.push({
+      id: Date.now(), farmerId, date: new Date().toISOString().split('T')[0],
+      creditAmount: credits, pricePerCredit: price,
+      totalAmount: total, commission, farmerPayout: payout,
+      status: 'paid', transactionRef: ref || `GT-${Date.now()}`
+    });
+    saveData();
+    msgDiv.innerHTML = `<div class="message message-success">✅ Paid $${payout.toFixed(2)} to ${farmer.fullname}. Credits auto-updated!</div>`;
+    setTimeout(() => { closeLedgerModal(); if (currentUser?.role === 'finance') renderApp(); }, 1500);
+  }
+  
+  function closeLedgerModal() { document.getElementById('updateLedgerModal').classList.remove('active'); }
+  
+  function renderLedgersList() {
+    return `<h3 class="section-title"> All Ledger Transactions</h3>
+      <button class="btn btn-info btn-sm" onclick="downloadLedgersCsv()" style="margin-bottom:0.8rem;">⬇ Download Payout Ledger (CSV)</button>
+      <div class="table-responsive"><table><thead><tr><th>Farmer</th><th>Date</th><th>Credits</th><th>Price</th><th>Total</th><th>Commission</th><th>Farmer Payout</th><th>Ref</th></tr></thead>
+      <tbody>${ledgers.map(l => { const f = users.find(u => u.id === l.farmerId); return `<tr><td>${f ? f.fullname : 'Unknown'}</td><td>${l.date}</td><td>${l.creditAmount}</td><td>$${l.pricePerCredit}</td><td>$${l.totalAmount.toFixed(2)}</td><td>$${l.commission.toFixed(2)}</td><td>$${l.farmerPayout.toFixed(2)}</td><td>${l.transactionRef}</td>`; }).join('')}</tbody></table></div>`;
+  }
+  
+  function renderUpdateLedgerForm() {
+    return `<div class="card"><h3> Update Farmer Ledger</h3><div id="quickLedgerMessage"></div>
+      <div class="form-group"><label>Select Farmer</label><select id="quickLedgerFarmer" onchange="quickPreviewLedger()">${users.filter(u => u.role === 'farmer' && u.status === 'approved').map(f => `<option value="${Number(f.id)}">${escapeHtml(f.fullname)} - ${Number(f.trees) || 0} trees</option>`).join('')}</select></div>
+      <div class="form-group"><label>Credits Sold</label><input type="number" id="quickLedgerCredits" placeholder="Credits" oninput="quickPreviewLedger()"></div>
+      <div class="form-group"><label>Price per Credit ($)</label><input type="number" id="quickLedgerPrice" placeholder="Price" value="9.50" oninput="quickPreviewLedger()"></div>
+      <div class="form-group" style="background:#e8f5e9; padding:0.5rem; border-radius:12px;">
+        <label style="color:#1b5e3f;"> Auto-Calculated:</label>
+        <div id="quickLedgerPreview" style="font-size:0.75rem;">Total: $0.00 | Commission (20%): $0.00 | Farmer Payout (80%): $0.00</div>
+      </div>
+      <button class="btn btn-success btn-block" onclick="quickAddLedger()">Process Payout →</button>
+    </div>`;
+  }
+  
+  function quickPreviewLedger() {
+    const credits = parseFloat(document.getElementById('quickLedgerCredits').value) || 0;
+    const price = parseFloat(document.getElementById('quickLedgerPrice').value) || 0;
+    const total = credits * price;
+    const commission = total * 0.2;
+    const payout = total - commission;
+    document.getElementById('quickLedgerPreview').innerHTML = 
+      `Total: $${total.toFixed(2)} | Commission (20%): $${commission.toFixed(2)} | Farmer Payout (80%): $${payout.toFixed(2)}`;
+  }
+  
+  function quickAddLedger() {
+    const farmerId = parseInt(document.getElementById('quickLedgerFarmer').value);
+    const credits = parseFloat(document.getElementById('quickLedgerCredits').value);
+    const price = parseFloat(document.getElementById('quickLedgerPrice').value);
+    const msgDiv = document.getElementById('quickLedgerMessage');
+    if (!credits || credits <= 0) { msgDiv.innerHTML = '<div class="message message-error">❌ Enter valid credits</div>'; return; }
+    const total = credits * price;
+    const commission = total * 0.2;
+    const payout = total - commission;
+    const farmer = users.find(u => u.id === farmerId);
+    if (farmer) {
+      farmer.totalEarned = (farmer.totalEarned || 0) + payout;
+      farmer.lastPayout = new Date().toISOString().split('T')[0];
+      farmer.estimatedCredits = Math.floor(farmer.trees * 0.18);
+    }
+    ledgers.push({
+      id: Date.now(), farmerId, date: new Date().toISOString().split('T')[0],
+      creditAmount: credits, pricePerCredit: price,
+      totalAmount: total, commission, farmerPayout: payout,
+      status: 'paid', transactionRef: `GT-${Date.now()}`
+    });
+    saveData();
+    msgDiv.innerHTML = `<div class="message message-success">✅ $${payout.toFixed(2)} paid to ${farmer.fullname}. Credits updated!</div>`;
+    setTimeout(() => { if (currentUser?.role === 'finance') renderApp(); }, 1500);
+  }
+  
+  // ===== FARMER DASHBOARD =====
+  function renderFarmerDashboard() {
+    const f = currentUser;
+    const myLedgers = ledgers.filter(l => l.farmerId === f.id);
+    const totalPaid = myLedgers.reduce((s, l) => s + l.farmerPayout, 0);
+    const myComplaints = complaints.filter(c => c.userId === f.id);
+    return `
+      <nav class="navbar"><div class="container nav-container">
+        <div class="logo"><h1>◆ GreenToken</h1><p>Farmer Portal</p></div>
+        <button type="button" class="nav-toggle" onclick="toggleNav(this)" aria-expanded="false" aria-controls="farmerNavLinks">☰ Menu</button>
+        <ul class="nav-links" id="farmerNavLinks">
+          <li><a onclick="showFarmerSection('dashboard')" class="active">Dashboard</a></li>
+          <li><a onclick="showFarmerSection('ledgers')">My Ledgers</a></li>
+          <li><a onclick="showFarmerSection('complaints')">Complaints (${myComplaints.length})</a></li>
+          <li><a onclick="showFarmerSection('converter')">💰 Converter</a></li>
+          <li><a onclick="showFarmerSection('profile')">Profile</a></li>
+          <li>${renderThemeToggle()}</li>
+          <li><a onclick="handleLogout()" class="logout-btn">Logout</a></li>
+        </ul>
+      </div></nav>
+      <div class="container">
+        <div class="datetime-card" id="farmerDateTime"><h3>--:--:--</h3><p>Loading...</p></div>
+        ${renderCurrencyConverter()}
+        <div id="farmerContent">
+          <div class="dashboard-stats">
+            <div class="stat-card"><h3>${f.trees || 0}</h3><p>Your Trees</p></div>
+            <div class="stat-card"><h3>${f.estimatedCredits || 0}</h3><p>Carbon Credits</p></div>
+            <div class="stat-card"><h3>$${totalPaid.toFixed(2)}</h3><p>Total Earnings</p></div>
+            <div class="stat-card"><h3>${myComplaints.filter(c => c.status === 'pending' || c.status === 'in-progress').length}</h3><p>Active Complaints</p></div>
+          </div>
+          <div class="card"><h3>Welcome, ${escapeHtml(f.fullname)}!</h3><p>Status: <strong class="status-approved">Approved</strong></p><p>Last Payout: ${escapeHtml(f.lastPayout || 'Not yet')}</p><p>Your ${Number(f.trees) || 0} trees generate ~${Number(f.estimatedCredits) || 0} carbon credits/year.</p>
+          <button class="btn btn-info btn-sm" onclick="showFarmerSection('complaints')"> Raise Complaint</button>
+          <button class="btn btn-gold btn-sm" onclick="showFarmerSection('converter')" style="margin-left:0.5rem;">💱 Convert Currency</button></div>
+        </div>
+      </div>
+      ${renderNewComplaintModal()}
+    `;
+  }
+  
+  function renderNewComplaintModal() {
+    return `<div id="newComplaintModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>Raise Complaint / Inquiry</h3><span class="close-modal" onclick="closeNewComplaint()">&times;</span></div>
+      <div id="complaintSubmitMessage"></div>
+      <div class="form-group"><label>Subject</label><input type="text" id="complaintSubject" placeholder="Brief subject"></div>
+      <div class="form-group"><label>Priority</label><select id="complaintPriority"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div>
+      <div class="form-group"><label>Message</label><textarea id="complaintMessage" rows="4" placeholder="Describe your issue..."></textarea></div>
+      <button class="btn btn-success btn-block" onclick="submitNewComplaint()">Submit Complaint →</button>
+    </div></div>`;
+  }
+  
+  function showNewComplaintModal() { document.getElementById('newComplaintModal').classList.add('active'); }
+  function closeNewComplaint() { document.getElementById('newComplaintModal').classList.remove('active'); document.getElementById('complaintSubmitMessage').innerHTML = ''; }
+  
+  function submitNewComplaint() {
+    const subject = document.getElementById('complaintSubject').value.trim();
+    const message = document.getElementById('complaintMessage').value.trim();
+    const priority = document.getElementById('complaintPriority').value;
+    const msgDiv = document.getElementById('complaintSubmitMessage');
+    if (!subject || !message) { msgDiv.innerHTML = '<div class="message message-error">❌ Fill subject and message</div>'; return; }
+    complaints.push({
+      id: Date.now(), userId: currentUser.id, userName: currentUser.fullname,
+      userRole: currentUser.role, subject, message, priority,
+      status: 'pending', date: new Date().toISOString(),
+      response: null, respondedBy: null, respondedDate: null
+    });
+    saveData();
+    msgDiv.innerHTML = '<div class="message message-success">✅ Complaint submitted!</div>';
+    setTimeout(() => { closeNewComplaint(); showFarmerSection('complaints'); }, 2000);
+  }
+  
+  function renderFarmerComplaints() {
+    const myComplaints = complaints.filter(c => c.userId === currentUser.id);
+    if (myComplaints.length === 0) return `<div class="card"><p>No complaints yet. <button class="btn btn-info btn-sm" onclick="showNewComplaintModal()">Raise One Now</button></p></div>`;
+    return `
+      <h3 class="section-title"> My Complaints</h3>
+      <button class="btn btn-info btn-sm" onclick="showNewComplaintModal()" style="margin-bottom:1rem;">➕ Raise New</button>
+      ${myComplaints.map(c => `
+        <div class="complaint-card">
+          <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+            <strong>${escapeHtml(c.subject)}</strong>
+            <span class="status-badge" style="background: ${c.status === 'resolved' ? '#27ae60' : c.status === 'in-progress' ? '#2980b9' : '#f39c12'}; color:white;">${c.status}</span>
+          </div>
+          <p style="font-size:0.8rem; margin:0.3rem 0;">${escapeHtml(c.message)}</p>
+          <div style="font-size:0.7rem; color:#666;">📅 ${formatDateTimeFull(c.date)} | Priority: ${c.priority}</div>
+          ${c.response ? `
+            <div style="background:#e8f5e9; padding:0.5rem; border-radius:8px; margin-top:0.5rem;">
+              <strong style="font-size:0.7rem;">Response:</strong>
+              <p style="font-size:0.75rem; margin:0.2rem 0;">${escapeHtml(c.response)}</p>
+              <span style="font-size:0.6rem; color:#666;">${c.respondedDate ? formatDateTimeFull(c.respondedDate) : ''}</span>
+            </div>
+          ` : `<div class="status-pending" style="font-size:0.7rem; margin-top:0.3rem;">Awaiting response...</div>`}
+        </div>
+      `).join('')}
+    `;
+  }
+  
+  function renderFarmerLedgers() {
+    const myLedgers = ledgers.filter(l => l.farmerId === currentUser.id);
+    if (myLedgers.length === 0) return `<div class="card"><p>No ledger transactions yet.</p></div>`;
+    return `<h3 class="section-title">My Payment Ledgers</h3>
+      <div class="table-responsive"><table><thead><tr><th>Date</th><th>Credits Sold</th><th>Price</th><th>Total Sale</th><th>Your Payout (80%)</th><th>Ref</th></tr></thead>
+      <tbody>${myLedgers.map(l => `<tr><td>${l.date}</td><td>${l.creditAmount}</td><td>$${l.pricePerCredit}</td><td>$${l.totalAmount.toFixed(2)}</td><td>$${l.farmerPayout.toFixed(2)}</td><td>${l.transactionRef}</td>`).join('')}</tbody></table></div>`;
+  }
+  
+  function renderFarmerProfile() {
+    const f = currentUser;
+    return `<h3 class="section-title">👤 My Profile</h3>
+      <div class="card"><p><strong>Name:</strong> ${escapeHtml(f.fullname)}</p><p><strong>Phone:</strong> ${escapeHtml(f.phone || 'Not provided')}</p><p><strong>District:</strong> ${escapeHtml(f.district || 'Not provided')}</p><p><strong>Trees:</strong> ${Number(f.trees) || 0}</p><p><strong>Carbon Credits:</strong> ${Number(f.estimatedCredits) || 0} tonnes</p><p><strong>Total Earned:</strong> $${(Number(f.totalEarned) || 0).toFixed(2)}</p><p><strong>Last Payout:</strong> ${escapeHtml(f.lastPayout || 'Not yet')}</p><p><strong>Registered:</strong> ${formatDate(f.registeredDate)}</p></div>`;
+  }
+  
+  // ===== HELPER FUNCTIONS =====
+  function viewFarmer(id) { const f = users.find(u => u.id === id); alert(`🌿 FARMER\nName: ${f.fullname}\nPhone: ${f.phone}\nTrees: ${f.trees}\nCredits: ${f.estimatedCredits}\nEarned: $${f.totalEarned || 0}\nStatus: ${f.status}`); }
+  function approveFarmer(id) { const f = users.find(u => u.id === id); if (f) { f.status = 'approved'; saveData(); renderApp(); alert(`✅ ${f.fullname} approved.`); } }
+  function rejectFarmer(id) { if (confirm('Reject this farmer?')) { users = users.filter(u => u.id !== id); saveData(); renderApp(); } }
+  function exportAllData() { const data = JSON.stringify({ farmers: users.filter(u => u.role === 'farmer'), ledgers, complaints, chat: chatMessages }, null, 2); const blob = new Blob([data], {type: 'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'greenToken_report.json'; a.click(); URL.revokeObjectURL(url); }
+  async function handleLogout() {
+    try { await api('/logout', { method: 'POST', body: '{}' }); } catch (error) { console.error(error); }
+    currentUser = null; showChangePassword = false;
+    users = []; ledgers = []; complaints = []; chatMessages = [];
+    if (dateTimeInterval) clearInterval(dateTimeInterval);
+    renderApp();
+  }
+
+  function renderExchangeRateSettings() {
+    return `<h3 class="section-title">USD Exchange Rate</h3>
+      <div class="card" style="max-width:600px;">
+        <p>Set how many Ugandan shillings equal one US dollar. This rate is shared with the Finance and Farmer portals.</p>
+        <div class="form-group" style="margin-top:1rem;">
+          <label for="adminExchangeRate">1 USD = UGX</label>
+          <input id="adminExchangeRate" type="number" min="1" max="1000000" step="0.01" value="${USD_TO_UGX}">
+        </div>
+        <div id="exchangeRateMessage" aria-live="polite"></div>
+        <button class="btn btn-success" onclick="updateExchangeRate()">Save Exchange Rate</button>
+      </div>`;
+  }
+
+  async function updateExchangeRate() {
+    const input = document.getElementById('adminExchangeRate');
+    const message = document.getElementById('exchangeRateMessage');
+    const rate = Number(input.value);
+    if (!Number.isFinite(rate) || rate < 1 || rate > 1000000) {
+      message.innerHTML = '<div class="message message-error">Enter a rate between 1 and 1,000,000 UGX per USD.</div>';
+      return;
+    }
+    const previousRate = USD_TO_UGX;
+    USD_TO_UGX = Math.round(rate * 10000) / 10000;
+    try {
+      await api('/sync', { method: 'POST', body: JSON.stringify({ users, ledgers, complaints, chatMessages, settings: { usdToUgx: USD_TO_UGX } }) });
+      alert(`Exchange rate updated: 1 USD = ${USD_TO_UGX} UGX`);
+      renderApp();
+    } catch (error) {
+      USD_TO_UGX = previousRate;
+      message.innerHTML = `<div class="message message-error">${escapeHtml(error.message)}</div>`;
+    }
+  }
+  
+  // ===== NAVIGATION =====
+  function showAdminSection(section) {
+    closeMobileNav();
+    const content = document.getElementById('adminContent');
+    if (section === 'dashboard') location.reload();
+    else if (section === 'farmers') content.innerHTML = renderFarmersList();
+    else if (section === 'pending') content.innerHTML = renderPendingApproval();
+    else if (section === 'registerFarmer') showRegisterFarmerModal();
+    else if (section === 'complaints') content.innerHTML = `<h3 class="section-title">All Complaints</h3>${renderAdminComplaintsList()}`;
+    else if (section === 'exchangeRate') content.innerHTML = renderExchangeRateSettings();
+    else if (section === 'chat') {
+      content.innerHTML = `<div id="chatSection">${renderChatInterface()}</div>`;
+      // Mark messages as read
+      chatMessages.filter(m => m.receiver === 'admin').forEach(m => m.read = true);
+      api('/read-chat', { method: 'POST', body: '{}' }).catch(console.error);
+      saveData();
+    }
+  }
+  
+  function showFinanceSection(section) {
+    closeMobileNav();
+    const content = document.getElementById('financeContent');
+    if (section === 'dashboard') location.reload();
+    else if (section === 'ledgers') content.innerHTML = renderLedgersList();
+    else if (section === 'updateLedger') content.innerHTML = renderUpdateLedgerForm();
+    else if (section === 'chat') {
+      content.innerHTML = `<div id="chatSection">${renderChatInterface()}</div>`;
+      chatMessages.filter(m => m.receiver === 'finance').forEach(m => m.read = true);
+      api('/read-chat', { method: 'POST', body: '{}' }).catch(console.error);
+      saveData();
+    }
+  }
+  
+  function showFarmerSection(section) {
+    closeMobileNav();
+    const content = document.getElementById('farmerContent');
+    if (section === 'dashboard') location.reload();
+    else if (section === 'ledgers') content.innerHTML = renderFarmerLedgers();
+    else if (section === 'complaints') content.innerHTML = renderFarmerComplaints();
+    else if (section === 'converter') content.innerHTML = `<h3 class="section-title">💱 Currency Converter</h3>${renderCurrencyConverter()}`;
+    else if (section === 'profile') content.innerHTML = renderFarmerProfile();
+  }
+  
+  // ===== EVENT ATTACHMENTS =====
+  function attachLoginEvents() { window.handleLogin = handleLogin; window.showSelfRegister = showSelfRegister; }
+  function attachChangePasswordEvents() { window.handleChangePassword = handleChangePassword; }
+  function attachSelfRegisterEvents() { window.handleSelfRegister = handleSelfRegister; window.renderApp = renderApp; }
+  function attachAdminEvents() {
+    window.showAdminSection = showAdminSection;
+    window.viewFarmer = viewFarmer;
+    window.approveFarmer = approveFarmer;
+    window.rejectFarmer = rejectFarmer;
+    window.deleteFarmer = deleteFarmer;
+    window.exportAllData = exportAllData;
+    window.handleLogout = handleLogout;
+    window.openComplaintResponse = openComplaintResponse;
+    window.closeComplaintResponse = closeComplaintResponse;
+    window.submitComplaintResponse = submitComplaintResponse;
+    window.convertCurrency = convertCurrency;
+    window.setQuickAmount = setQuickAmount;
+    window.sendChatMessage = sendChatMessage;
+    window.showRegisterFarmerModal = showRegisterFarmerModal;
+    window.closeRegisterFarmerModal = closeRegisterFarmerModal;
+    window.adminRegisterFarmer = adminRegisterFarmer;
+    window.updateExchangeRate = updateExchangeRate;
+    window.downloadFarmersCsv = downloadFarmersCsv;
+    window.printFarmersList = printFarmersList;
+  }
+  function attachFinanceEvents() {
+    window.showFinanceSection = showFinanceSection;
+    window.addLedgerEntry = addLedgerEntry;
+    window.quickAddLedger = quickAddLedger;
+    window.closeLedgerModal = closeLedgerModal;
+    window.handleLogout = handleLogout;
+    window.convertCurrency = convertCurrency;
+    window.setQuickAmount = setQuickAmount;
+    window.sendChatMessage = sendChatMessage;
+    window.previewLedgerCalculation = previewLedgerCalculation;
+    window.quickPreviewLedger = quickPreviewLedger;
+    window.downloadFarmersCsv = downloadFarmersCsv;
+    window.downloadLedgersCsv = downloadLedgersCsv;
+    window.printFarmersList = printFarmersList;
+  }
+  function attachFarmerEvents() {
+    window.showFarmerSection = showFarmerSection;
+    window.handleLogout = handleLogout;
+    window.showNewComplaintModal = showNewComplaintModal;
+    window.closeNewComplaint = closeNewComplaint;
+    window.submitNewComplaint = submitNewComplaint;
+    window.convertCurrency = convertCurrency;
+    window.setQuickAmount = setQuickAmount;
+  }
+  
+  (async function initializeApp() {
+    try { await loadServerData(); }
+    catch (error) { currentUser = null; }
+    renderApp();
+  })();
+</script>
+</body>
+</html>
